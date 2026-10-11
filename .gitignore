@@ -1,0 +1,7 @@
+# Swift Package Manager and Xcode build products
+/.build
+/.swiftpm
+/DerivedData
+xcuserdata/
+.DS_Store
+.tmp/
