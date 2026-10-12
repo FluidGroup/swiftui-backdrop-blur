@@ -1,6 +1,6 @@
 # SwiftUI Backdrop Blur
 
-<img width="2752" height="2064" alt="backdrop-blur-showcase" src="https://github.com/user-attachments/assets/4c5a0171-dfa9-4697-b407-809703cacf14" />
+<img width="1280" height="960" alt="backdrop-blur-showcase Large" src="https://github.com/user-attachments/assets/1155a3f2-7358-4bda-b258-3d8e44e94979" />
 
 Uniform and progressive backdrop blur views for SwiftUI on iOS 17 and later.
 Requires Swift 6. The package has no external dependencies.
