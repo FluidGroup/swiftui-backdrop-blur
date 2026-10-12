@@ -11,10 +11,20 @@ is not a guarantee of compatibility or App Store acceptance.
 
 ## Add the package
 
-For a local checkout, add the package folder in Xcode, or use:
+[Version 1.0.0](https://github.com/FluidGroup/swiftui-backdrop-blur/releases/tag/1.0.0)
+is available through Swift Package Manager.
+
+In Xcode, choose **File → Add Package Dependencies**, enter
+`https://github.com/FluidGroup/swiftui-backdrop-blur`, and select **Up to Next Major
+Version** starting at **1.0.0**. Add the `BackdropBlur` product to your app target.
+
+For a `Package.swift` manifest, add:
 
 ```swift
-.package(path: "/path/to/swiftui-backdrop-blur")
+.package(
+  url: "https://github.com/FluidGroup/swiftui-backdrop-blur",
+  from: "1.0.0"
+)
 ```
 
 Add the `BackdropBlur` library product to the consuming target:
@@ -23,8 +33,11 @@ Add the `BackdropBlur` library product to the consuming target:
 .product(name: "BackdropBlur", package: "swiftui-backdrop-blur")
 ```
 
-The repository is https://github.com/FluidGroup/swiftui-backdrop-blur.
-Remote installation requires the package to be committed and pushed there.
+For a local checkout, use the package folder instead of the remote dependency:
+
+```swift
+.package(path: "/path/to/swiftui-backdrop-blur")
+```
 
 ## Uniform blur
 
@@ -77,6 +90,19 @@ and layout changes reuse the mask. No Core Image context or filter is created.
 Both views add no tint and disable interaction on their UIKit backing views.
 They sample live content behind their bounds rather than taking a snapshot.
 Give the views an explicit size or use an overlay/background that supplies one.
+
+## Photo showcase
+
+The screenshot shows the views rendering live in an iOS 18.6 Simulator.
+From left to right:
+
+- **Uniform:** `BackdropBlurView` behind a floating collection panel.
+- **Progressive:** `VariableBlurView` fading from clear to blurred at the bottom.
+- **Layered:** a uniform search surface with a progressive lower toolbar.
+
+The phone frames and interface are SwiftUI artwork on one iPad canvas. The blur
+comes from the package's live native layers; the demo adds a subtle tint for
+text contrast.
 
 ## Development
 
