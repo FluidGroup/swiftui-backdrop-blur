@@ -2,10 +2,10 @@
 
 <img width="1280" height="960" alt="backdrop-blur-showcase Large" src="https://github.com/user-attachments/assets/1155a3f2-7358-4bda-b258-3d8e44e94979" />
 
-Uniform and progressive backdrop blur views for SwiftUI on iOS 17 and later.
+Uniform and progressive backdrop blur views and live portal mirroring for SwiftUI on iOS 17 and later.
 Requires Swift 6. The package has no external dependencies.
 
-Both views use private native backdrop and Core Animation filter runtime APIs.
+The views use private native backdrop, Core Animation filter, and portal runtime APIs.
 Those APIs must be available on the running OS. Encoding a runtime class name
 is not a guarantee of compatibility or App Store acceptance.
 
@@ -91,6 +91,34 @@ Both views add no tint and disable interaction on their UIKit backing views.
 They sample live content behind their bounds rather than taking a snapshot.
 Give the views an explicit size or use an overlay/background that supplies one.
 
+## Live portal mirror
+
+`PortalView` mirrors an existing `UIView` or `CALayer` live, including its
+ongoing content updates and animations:
+
+```swift
+import BackdropBlur
+import SwiftUI
+
+// sourceView is a UIView already displayed in the same on-screen layer tree.
+PortalView(sourceView: sourceView)
+  .frame(width: 240, height: 180)
+  .clipShape(RoundedRectangle(cornerRadius: 24))
+
+// Mirror a layer and hide its original rendering while the portal is mounted.
+PortalView(sourceLayer: sourceLayer, hidesSourceLayer: true)
+  .frame(width: 240, height: 180)
+```
+
+The portal draws at the source's scale and clips to its own bounds; its frame
+does not resize the source content. Touches pass through the mirror. Pass `nil`
+to stop mirroring. Removing the portal disconnects its native source reference,
+so a hidden source renders normally again. Keep the source mounted and outside
+the portal's ancestor chain; mirroring an ancestor would create a rendering cycle.
+
+The layer-mirroring approach is adapted from
+[FluidInterfaceKit's FluidPortal](https://github.com/FluidGroup/FluidInterfaceKit/tree/main/Sources/FluidPortal).
+
 ## Photo showcase
 
 The screenshot shows the views rendering live in an iOS 18.6 Simulator.
@@ -106,7 +134,7 @@ text contrast.
 
 ## Development
 
-Both views include `#Preview` examples. Build and test on an iOS Simulator;
+All views include `#Preview` examples. Build and test on an iOS Simulator;
 this UIKit package does not support macOS or Linux builds with `swift test`.
 
 ```sh
