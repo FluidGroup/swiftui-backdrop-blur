@@ -9,12 +9,12 @@ import UIKit
 /// This view depends on private native Core Animation runtime APIs.
 public struct PortalView: View {
 
-  private let sourceLayer: CALayer?
-  private let hidesSourceLayer: Bool
+  private let source: CALayer?
+  private let hidesSource: Bool
 
   public init(sourceLayer: CALayer?, hidesSourceLayer: Bool = false) {
-    self.sourceLayer = sourceLayer
-    self.hidesSourceLayer = hidesSourceLayer
+    self.source = sourceLayer
+    self.hidesSource = hidesSourceLayer
   }
 
   public init(sourceView: UIView?, hidesSourceLayer: Bool = false) {
@@ -22,22 +22,22 @@ public struct PortalView: View {
   }
 
   public var body: some View {
-    Representable(sourceLayer: sourceLayer, hidesSourceLayer: hidesSourceLayer)
+    Representable(source: source, hidesSource: hidesSource)
   }
 
   private struct Representable: UIViewRepresentable {
 
-    let sourceLayer: CALayer?
-    let hidesSourceLayer: Bool
+    let source: CALayer?
+    let hidesSource: Bool
 
     func makeUIView(context: Context) -> BackingView {
       let view = BackingView(frame: .zero)
-      view.update(sourceLayer: sourceLayer, hidesSourceLayer: hidesSourceLayer)
+      view.update(sourceLayer: source, hidesSourceLayer: hidesSource)
       return view
     }
 
     func updateUIView(_ uiView: BackingView, context: Context) {
-      uiView.update(sourceLayer: sourceLayer, hidesSourceLayer: hidesSourceLayer)
+      uiView.update(sourceLayer: source, hidesSourceLayer: hidesSource)
     }
 
     static func dismantleUIView(_ uiView: BackingView, coordinator: ()) {
@@ -49,7 +49,7 @@ public struct PortalView: View {
   // https://github.com/FluidGroup/FluidInterfaceKit/blob/main/Sources/FluidPortal/PortalView.swift
   final class BackingView: UIView {
 
-    private weak var sourceLayer: CALayer?
+    private weak var source: CALayer?
     private var isInHierarchy = false
 
     override class var layerClass: AnyClass {
@@ -69,7 +69,7 @@ public struct PortalView: View {
     }
 
     func update(sourceLayer: CALayer?, hidesSourceLayer: Bool) {
-      self.sourceLayer = sourceLayer
+      self.source = sourceLayer
 
       CATransaction.begin()
       CATransaction.setDisableActions(true)
@@ -93,11 +93,11 @@ public struct PortalView: View {
     }
 
     private func updateSource() {
-      let source = isInHierarchy ? sourceLayer : nil
-      guard (layer.value(forKey: Runtime.sourceKey) as? CALayer) !== source else {
+      let activeSource = isInHierarchy ? source : nil
+      guard (layer.value(forKey: Runtime.sourceKey) as? CALayer) !== activeSource else {
         return
       }
-      layer.setValue(source, forKey: Runtime.sourceKey)
+      layer.setValue(activeSource, forKey: Runtime.sourceKey)
     }
   }
 
